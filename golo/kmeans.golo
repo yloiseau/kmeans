@@ -2,7 +2,6 @@
 module kmeans
 
 import java.lang.Math
-import java.util
 
 struct Point = {x, y}
 augment Point {
@@ -41,14 +40,14 @@ function groupBy = |points, centroids| {
   let groups = map[]
   foreach point in points {
     let center = closest(point, centroids)
-    groups: addIfAbsent(center, -> list[])
+    groups: addIfAbsent(center, -> vector[])
     groups: get(center): add(point)
   }
   return groups
 }
 
 function update = |points, centroids| {
-  let result = list[]
+  let result = vector[]
   foreach value in groupBy(points, centroids): values() {
     result: add(average(value))
   }
