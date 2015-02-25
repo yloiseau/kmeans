@@ -19,11 +19,9 @@ function sq = |x| -> x * x
 
 function distance = |p1, p2| -> sqrt(sq(p1: x() - p2: x()) + sq(p1: y() - p2: y()))
 
-#function closest = |p, ps| -> ps: tail(): reduce(ps: head(), compareDistance(p))
 function closest = |p, ps| {
-  let tail = ps: tail()
   var acc = ps: head()
-  foreach point in tail {
+  foreach point in ps: tail() {
     if distance(p, acc) > distance(p, point) {
       acc = point
     }
@@ -31,14 +29,12 @@ function closest = |p, ps| {
   return acc
 }
 
-# function average = |points| -> points: reduce(ORIGIN, ^add): scale(points: size())
 function average = |points| {
   var acc = ORIGIN
-  let size = points: size()
   foreach point in points {
     acc = add(acc, point)
   }
-  return acc: scale(size)
+  return acc: scale(points: size())
 } 
 
 function groupBy = |points, centroids| {
@@ -51,12 +47,9 @@ function groupBy = |points, centroids| {
   return groups
 }
 
-#function update = |points, centroids| ->
- # LinkedList(groupBy(points, centroids): values()): map(^average)
 function update = |points, centroids| {
-  let values = groupBy(points, centroids): values()
   let result = list[]
-  foreach value in values {
+  foreach value in groupBy(points, centroids): values() {
     result: add(average(value))
   }
   return result
